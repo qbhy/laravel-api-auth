@@ -5,7 +5,7 @@ namespace Qbhy\LaravelApiAuth;
 use Closure;
 use RuntimeException;
 
-class Middleware
+class LaravelApiAuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -43,7 +43,7 @@ class Middleware
                 return $this->error();  // 签名不一致
             }
 
-            $timeout = config('api_auth.timeout', 30);
+            $timeout = config('api_auth.timeout', 60);
             if (time() - $timestamp > $timeout) {
                 return $this->error();      // 签名失效
             }

@@ -23,7 +23,7 @@ composer require 96qbhy/laravel-api-auth
 3. 在 `App\Http\Kernal` 中注册中间件 
     ```php
     protected $routeMiddleware = [
-        'api_auth' => Qbhy\LaravelApiAuth\Middleware::class,
+        'api_auth' => App\Http\Middleware\LaravelApiAuthMiddleware::class,
     ];
     ```
     
@@ -40,7 +40,8 @@ composer require 96qbhy/laravel-api-auth
             return md5($secret_key . $echostr . $timestamp);
         },
     ```
-## 使用
+    
+## 使用  
 ### 路由中
 ```php
 Route::group(['middleware'=>'api_auth'], function(){
@@ -49,7 +50,7 @@ Route::group(['middleware'=>'api_auth'], function(){
 
 \\ or
 
-Route::get('test', function(){
+Route::get('api/example', function(){
     // todo...
 })->middleware(['api_auth']);
 ```
@@ -75,11 +76,12 @@ const requestConfig = {
         "api-access-key": access_key
     }
 };
-axios.post('/example',{},requestConfig).then(res=>{
+axios.post('/api/example',{},requestConfig).then(res=>{
     // todo
 });
 ```
 > 本例子为 `web` 前端的例子，其他客户端同理，生成签名并且带上指定参数即可正常请求。
+> 更多自定义可以直接修改 `App\Http\Middleware\LaravelApiAuthMiddleware` 中间件 。有问题请开 `issue` 。
 
 
 
