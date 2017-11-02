@@ -19,10 +19,10 @@ class ServiceProvider extends LaravelServiceProvider
     protected function setupConfig()
     {
         $configSource = realpath(__DIR__ . '/config.php');
-        $middlewareSource = realpath(__DIR__ . '/LaravelApiAuthMiddleware.php');
+//        $middlewareSource = realpath(__DIR__ . '/LaravelApiAuthMiddleware.php');
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([
-                $middlewareSource => app_path('Http\Middleware\LaravelApiAuthMiddleware.php'),
+//                $middlewareSource => app_path('Http\Middleware\LaravelApiAuthMiddleware.php'),
                 $configSource => config_path('api_auth.php')
             ]);
         } elseif ($this->app instanceof LumenApplication) {

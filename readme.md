@@ -23,7 +23,7 @@ composer require 96qbhy/laravel-api-auth
 3. 在 `App\Http\Kernal` 中注册中间件 
     ```php
     protected $routeMiddleware = [
-        'api_auth' => App\Http\Middleware\LaravelApiAuthMiddleware::class,
+        'api_auth' => Qbhy\LaravelApiAuth\LaravelApiAuthMiddleware::class,
     ];
     ```
     
@@ -81,8 +81,7 @@ axios.post('/api/example',{},requestConfig).then(res=>{
 });
 ```
 > 本例子为 `web` 前端的例子，其他客户端同理，生成签名并且带上指定参数即可正常请求。
-> 更多自定义可以直接修改 `App\Http\Middleware\LaravelApiAuthMiddleware` 中间件 。有问题请开 `issue` 。
-
+> 更多自定义可以直接复制 `Qbhy\LaravelApiAuth\LaravelApiAuthMiddleware` 中间件后自行修改 。有问题请开 `issue` 。
 
 
 [96qbhy.com](https://96qbhy.com)  
