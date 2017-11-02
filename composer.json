@@ -19,5 +19,12 @@
     "require": {},
     "require-dev": {
         "laravel/laravel": "^5.5"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qbhy\\LaravelApiAuth\\ServiceProvider"
+            ]
+        }
     }
 }
