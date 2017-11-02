@@ -1,0 +1,23 @@
+{
+    "name": "96qbhy/laravel-api-auth",
+    "description": "laravel API 鉴权",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "96qbhy",
+            "email": "96qbhy@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Qbhy\\LaravelApiAuth\\": "src"
+        },
+        "files": [
+            "src/fn.php"
+        ]
+    },
+    "require": {},
+    "require-dev": {
+        "laravel/laravel": "^5.5"
+    }
+}
