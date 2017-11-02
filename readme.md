@@ -1,7 +1,7 @@
 # laravel-api-auth
 laravel API 鉴权
 
-这是一个 laravel 的 API 鉴权包，不同于 `passport` , `laravel-api-auth` 采用的是密钥加密，只要客户端不被反编译从而泄露密钥，该方式可谓绝对安全(不考虑量子计算机出现的可能性)。
+这是一个 laravel 的 API 鉴权包， `laravel-api-auth` 采用的是密钥加密，只要客户端不被反编译从而泄露密钥，该鉴权方式理论上来说是安全的(不考虑量子计算机出现的可能性)。
 
 ## 安装  
 ```bash
