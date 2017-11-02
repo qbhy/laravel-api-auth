@@ -5,7 +5,7 @@ laravel API 鉴权
 
 ## 安装  
 ```bash
-composer require 96qbhy/laravel-api-auth:dev-master
+composer require 96qbhy/laravel-api-auth
 ```
 
 ## 配置
