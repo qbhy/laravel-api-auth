@@ -26,10 +26,10 @@ composer require 96qbhy/laravel-api-auth:dev-master
     ```
     
 4. 添加 `role` 
-```php
-php artisan api_auth
-```
-然后按照格式把 access_key 和 secret_key 添加到, `config/api_auth.php` 里面的 `roles` 中。
+    ```php
+    php artisan api_auth
+    ```
+    然后按照格式把 access_key 和 secret_key 添加到, `config/api_auth.php` 里面的 `roles` 中。
 
 [96qbhy.com](https://96qbhy.com)  
 96qbhy@gmail.com
