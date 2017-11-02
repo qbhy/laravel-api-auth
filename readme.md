@@ -16,7 +16,9 @@ composer require 96qbhy/laravel-api-auth
     > laravel 5.5+ 版本不需要手动注册
 
 2. 发布配置文件
+    ```php
     php artisan vendor:publish --provider="Qbhy\LaravelApiAuth\ServiceProvider"
+    ```
 
 3. 在 `App\Http\Kernal` 中注册中间件 
     ```php

@@ -18,10 +18,10 @@ class Middleware
     public function handle($request, Closure $next)
     {
         if (config('api_auth.status') === 'on') {
-            $accessKey = $request->header(':api-access-key');
-            $timestamp = $request->header(':api-timestamp');
-            $echostr = $request->header(':api-echostr');
-            $signature = $request->header(':api-signature');
+            $accessKey = $request->header('api-access-key');
+            $timestamp = $request->header('api-timestamp');
+            $echostr = $request->header('api-echostr');
+            $signature = $request->header('api-signature');
 
             if (empty($timestamp) || empty($accessKey) || empty($echostr) || empty($signature)) {
                 return $this->error();      // 缺少请求头
