@@ -25,6 +25,9 @@ class ServiceProvider extends LaravelServiceProvider
             $this->app->configure('api_auth');
         }
         $this->mergeConfigFrom($source, 'api_auth');
+        $this->commands([
+            Command::class,
+        ]);
     }
 
 }
