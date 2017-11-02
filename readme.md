@@ -31,7 +31,57 @@ composer require 96qbhy/laravel-api-auth
     ```php
     php artisan api_auth
     ```
-    然后按照格式把 access_key 和 secret_key 添加到, `config/api_auth.php` 里面的 `roles` 中。
+    然后按照格式把 `access_key` 和 `secret_key` 添加到, `config/api_auth.php` 里面的 `roles` 中。
+
+5. 自定义签名方法  
+    `config/api_auth.php` 中的 `encrypting` 可以修改为自定义的签名函数，该函数将传入三个参数: 密钥、随机字符串、时间戳。该函数默认为: 
+    ```php
+        'encrypting' => function ($secret_key, $echostr, $timestamp) {
+            return md5($secret_key . $echostr . $timestamp);
+        },
+    ```
+## 使用
+### 路由中
+```php
+Route::group(['middleware'=>'api_auth'], function(){
+    // routes...
+});
+
+\\ or
+
+Route::get('test', function(){
+    // todo...
+})->middleware(['api_auth']);
+```
+
+### 前端
+```javascript 1.8
+
+const access_key = '{access_key}';  // 服务端生成的 access_key
+const secret_key = '{secret_key}';  // 服务端生成的 secret_key
+
+const timestamp = Date.parse(new Date()) / 1000;    // 取时间戳
+const echostr = 'asldjaksdjlkjgqpojg64131321';      // 随机字符串自行生成
+
+function encrypting(secret_key, echostr, timestamp){
+    return md5(secret_key + echostr + timestamp);    // md5 库自行引入
+}
+
+const requestConfig = {
+    headers: {
+        "api-signature": encrypting(secret_key, echostr, timestamp),
+        "api-echostr": echostr,
+        "api-timestamp": timestamp,
+        "api-access-key": access_key
+    }
+};
+axios.post('/example',{},requestConfig).then(res=>{
+    // todo
+});
+```
+> 本例子为 `web` 前端的例子，其他客户端同理，生成签名并且带上指定参数即可正常请求。
+
+
 
 [96qbhy.com](https://96qbhy.com)  
 96qbhy@gmail.com
