@@ -1,7 +1,7 @@
 # laravel-api-auth
 laravel API 鉴权
 
-这是一个 laravel 的 API 鉴权包， `laravel-api-auth` 采用的是密钥加密，只要客户端不被反编译从而泄露密钥，该鉴权方式理论上来说是安全的(不考虑量子计算机出现的可能性)。
+这是一个 laravel 的 API 鉴权包， `laravel-api-auth` 采用密钥加密的鉴权方式，只要客户端不被反编译从而泄露密钥，该鉴权方式理论上来说是安全的(不考虑量子计算机的出现)。
 
 ## 安装  
 ```bash
@@ -24,6 +24,7 @@ composer require 96qbhy/laravel-api-auth
     ```php
     protected $routeMiddleware = [
         'api_auth' => Qbhy\LaravelApiAuth\LaravelApiAuthMiddleware::class,
+        // other ...
     ];
     ```
     
