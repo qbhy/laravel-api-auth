@@ -68,7 +68,7 @@ composer require 96qbhy/laravel-api-auth
       * @param int $code
       * @return \Illuminate\Http\JsonResponse
       */
-     function rule($request, $code)
+     function error_handler($request, $code)
      {
          return response()->json([
              'msg' => 'Forbidden',
