@@ -31,9 +31,17 @@ composer require 96qbhy/laravel-api-auth
     ```php
     php artisan api_auth
     ```
-    然后按照格式把 `access_key` 和 `secret_key` 添加到, `config/api_auth.php` 里面的 `roles` 中。
+    然后按照格式把 `access_key` 和 `secret_key` 添加到, `config/api_auth.php` 里面的 `roles` 数组中。
+    ```php
+    'roles' => [
+        '{access_key}' => [
+            'name' => '{role_name}',        // 角色名字，例如 android
+            'secret_key' => '{secret_key}',
+        ],
+    ],
+    ```
 
-5. 自定义签名方法  
+5. 自定义签名方法 (可选)
     `config/api_auth.php` 中的 `encrypting` 可以修改为自定义的签名函数，该函数将传入三个参数: 密钥: `$secret_key`、随机字符串: `$echostr`、时间戳: `$timestamp`，返回签名后的字符串。该函数默认为: 
     ```php
     /**
@@ -46,7 +54,7 @@ composer require 96qbhy/laravel-api-auth
         return md5($secret_key . $echostr . $timestamp);
     }
     ```
-6. 自定义签名校验规则
+6. 自定义签名校验规则(可选)
     `config/api_auth.php` 中的 `rule` 可以修改为自定义的校验函数，该函数将传入三个参数: 密钥: `$secret_key`、客户端签名: `$signature`、服务端签名: `$server_signature`，必须返回布尔值。该函数默认为: 
      ```php
      /**
@@ -60,7 +68,7 @@ composer require 96qbhy/laravel-api-auth
          return $signature === $server_signature;
      }
      ```
-7. 自定义错误处理
+7. 自定义错误处理(可选)
     `config/api_auth.php` 中的 `error_handler` 可以修改为自定义的错误处理函数，该函数将传入两个参数: 请求: `$request`、错误码: `$code`。该函数默认为: 
      ```php
      /**
@@ -99,7 +107,8 @@ Route::get('api/example', function(){
 ```
 
 ### 前端
-```javascript 1.8
+```javascript
+import axios from 'axios';
 
 const access_key = '{access_key}';  // 服务端生成的 access_key
 const secret_key = '{secret_key}';  // 服务端生成的 secret_key
@@ -119,6 +128,7 @@ const requestConfig = {
         "api-access-key": access_key
     }
 };
+
 axios.post('/api/example',{},requestConfig).then(res=>{
     // todo
 });
