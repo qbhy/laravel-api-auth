@@ -64,9 +64,9 @@ class LaravelApiAuthMiddleware
                 throw new RuntimeException('config("api_auth.rule") is not function !');
             }
 
-            $serverSignature = call_user_func_array($encrypting, [$roles[$accessKey]['secret_key'], $echostr, $timestamp]);
+            $server_signature = call_user_func_array($encrypting, [$roles[$accessKey]['secret_key'], $echostr, $timestamp]);
 
-            if (call_user_func_array($rule, [$roles[$accessKey]['secret_key'], $signature, $serverSignature])) {
+            if (!call_user_func_array($rule, [$roles[$accessKey]['secret_key'], $signature, $server_signature])) {
                 return call_user_func_array($error_handler, [
                     $request,
                     LaravelApiAuthMiddleware::SIGNATURE_ERROR
@@ -121,11 +121,11 @@ class LaravelApiAuthMiddleware
     /**
      * @param $secret_key
      * @param $signature
-     * @param $serverSignature
+     * @param $server_signature
      * @return bool
      */
-    public static function rule($secret_key, $signature, $serverSignature)
+    public static function rule($secret_key, $signature, $server_signature)
     {
-        return $signature === $serverSignature;
+        return $signature === $server_signature;
     }
 }

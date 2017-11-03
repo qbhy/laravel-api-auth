@@ -47,17 +47,17 @@ composer require 96qbhy/laravel-api-auth
     }
     ```
 6. 自定义签名校验规则
-    `config/api_auth.php` 中的 `rule` 可以修改为自定义的校验函数，该函数将传入三个参数: 密钥: `$secret_key`、客户端签名: `$signature`、服务端签名: `$serverSignature`，必须返回布尔值。该函数默认为: 
+    `config/api_auth.php` 中的 `rule` 可以修改为自定义的校验函数，该函数将传入三个参数: 密钥: `$secret_key`、客户端签名: `$signature`、服务端签名: `$server_signature`，必须返回布尔值。该函数默认为: 
      ```php
      /**
       * @param $secret_key
       * @param $signature
-      * @param $serverSignature
+      * @param $server_signature
       * @return bool
       */
-     function rule($secret_key, $signature, $serverSignature)
+     function rule($secret_key, $signature, $server_signature)
      {
-         return $signature === $serverSignature;
+         return $signature === $server_signature;
      }
      ```
 7. 自定义错误处理
