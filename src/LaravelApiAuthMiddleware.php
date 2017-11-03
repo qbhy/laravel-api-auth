@@ -26,7 +26,7 @@ class LaravelApiAuthMiddleware
     public function handle($request, Closure $next)
     {
         if (config('api_auth.status') === 'on') {
-            $accessKey = $request->header('api-access-key');
+            $access_key = $request->header('api-access-key');
             $timestamp = $request->header('api-timestamp');
             $echostr = $request->header('api-echostr');
             $signature = $request->header('api-signature');
@@ -39,7 +39,7 @@ class LaravelApiAuthMiddleware
                 throw new RuntimeException('config("api_auth.error_handler") is not function !');
             }
 
-            if (empty($timestamp) || empty($accessKey) || empty($echostr) || empty($signature)) {
+            if (empty($timestamp) || empty($access_key) || empty($echostr) || empty($signature)) {
                 return call_user_func_array($error_handler, [
                     $request,
                     LaravelApiAuthMiddleware::LACK_HEADER
@@ -47,7 +47,7 @@ class LaravelApiAuthMiddleware
             }
 
             $roles = config('api_auth.roles');
-            if (!isset($roles[$accessKey])) {
+            if (!isset($roles[$access_key])) {
                 return call_user_func_array($error_handler, [
                     $request,
                     LaravelApiAuthMiddleware::ACCESS_KEY_ERROR
@@ -64,9 +64,9 @@ class LaravelApiAuthMiddleware
                 throw new RuntimeException('config("api_auth.rule") is not function !');
             }
 
-            $server_signature = call_user_func_array($encrypting, [$roles[$accessKey]['secret_key'], $echostr, $timestamp]);
+            $server_signature = call_user_func_array($encrypting, [$roles[$access_key]['secret_key'], $echostr, $timestamp]);
 
-            if (!call_user_func_array($rule, [$roles[$accessKey]['secret_key'], $signature, $server_signature])) {
+            if (!call_user_func_array($rule, [$roles[$access_key]['secret_key'], $signature, $server_signature])) {
                 return call_user_func_array($error_handler, [
                     $request,
                     LaravelApiAuthMiddleware::SIGNATURE_ERROR
@@ -90,6 +90,13 @@ class LaravelApiAuthMiddleware
                 cache()->put('api_auth:' . $signature, $request->getClientIp(), $timeout / 60);
             }
 
+            /**
+             * 添加 role_name 到 $request 中
+             */
+            if ($request->has('client_role')) {
+                $request->offsetSet('_client_role', $request->get('client_role'));
+            }
+            $request->offsetSet('client_role', $roles[$access_key]['name']);
         }
         return $next($request);
     }

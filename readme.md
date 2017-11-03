@@ -96,16 +96,18 @@ composer require 96qbhy/laravel-api-auth
 ## 使用  
 ### 路由中
 ```php
-Route::group(['middleware'=>'api_auth'], function(){
-    // routes...
-});
+Route::get('api/example', function(Request $request){
+    // $request->get('client_role');
+    // todo...
+})->middleware(['api_auth']);
 
 \\ or
 
-Route::get('api/example', function(){
-    // todo...
-})->middleware(['api_auth']);
+Route::group(['middleware'=>'api_auth'], function(){
+    // routes...
+});
 ```
+> 通过验证后 `$request` 会添加一个 `client_role` 字段，该字段为客户端的角色名称。
 
 ### 前端
 ```javascript
