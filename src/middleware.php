@@ -1,12 +1,12 @@
 <?php
 
-namespace Qbhy\LaravelApiAuth;
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use RuntimeException;
 
-class LaravelApiAuthMiddleware
+class LaravelApiAuth
 {
 
     const LACK_HEADER = 1001;   // 缺少头
