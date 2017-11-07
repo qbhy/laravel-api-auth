@@ -1,6 +1,6 @@
 <?php
 
-use Qbhy\LaravelApiAuth\LaravelApiAuthMiddleware;
+use App\Http\Middleware\LaravelApiAuth;
 
 return [
     'status' => 'on', // 状态，on 或者 off
@@ -14,9 +14,9 @@ return [
 
     'timeout' => 60, // 签名失效时间，单位: 秒
 
-    'encrypting' => [LaravelApiAuthMiddleware::class, 'encrypting'], // 自定义签名方法
+    'encrypting' => [LaravelApiAuth::class, 'encrypting'], // 自定义签名方法
 
-    'rule' => [LaravelApiAuthMiddleware::class, 'rule'], // 判断签名正确的规则，默认是相等
+    'rule' => [LaravelApiAuth::class, 'rule'], // 判断签名正确的规则，默认是相等
 
-    'error_handler' => [LaravelApiAuthMiddleware::class, 'error_handler'], // 签名错误处理方法。
+    'error_handler' => [LaravelApiAuth::class, 'error_handler'], // 签名错误处理方法。
 ];
