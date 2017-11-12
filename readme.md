@@ -86,11 +86,11 @@ composer require 96qbhy/laravel-api-auth
      }  
      ```
      `$code` 可能是以下几个值中的一个:
-     * `LaravelApiAuthMiddleware::LACK_HEADER` -> 缺少请求头。
-     * `LaravelApiAuthMiddleware::ACCESS_KEY_ERROR` -> `access_key` 错误。
-     * `LaravelApiAuthMiddleware::SIGNATURE_ERROR` -> 签名错误。
-     * `LaravelApiAuthMiddleware::SIGNATURE_LAPSE` -> 签名失效，客户端签名时间和服务端签名时间差超过设置的 `timeout` 值。
-     * `LaravelApiAuthMiddleware::SIGNATURE_REPETITION` -> 签名重复，规定时间内出现两次或以上相同的签名。
+     * `LaravelApiAuth::LACK_HEADER` -> 缺少请求头。
+     * `LaravelApiAuth::ACCESS_KEY_ERROR` -> `access_key` 错误。
+     * `LaravelApiAuth::SIGNATURE_ERROR` -> 签名错误。
+     * `LaravelApiAuth::SIGNATURE_LAPSE` -> 签名失效，客户端签名时间和服务端签名时间差超过设置的 `timeout` 值。
+     * `LaravelApiAuth::SIGNATURE_REPETITION` -> 签名重复，规定时间内出现两次或以上相同的签名。
      
      
 ## 使用  
