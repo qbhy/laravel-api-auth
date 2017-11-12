@@ -9,11 +9,11 @@ use RuntimeException;
 class LaravelApiAuth
 {
 
-    const LACK_HEADER = 1001;   // 缺少头
-    const ACCESS_KEY_ERROR = 1002;   // access_key 错误
-    const SIGNATURE_ERROR = 1003;   // 签名错误
-    const SIGNATURE_LAPSE = 1004;   // 签名失效
-    const SIGNATURE_REPETITION = 1005;   // 签名重复
+    const LACK_HEADER = 1001;               // 缺少头
+    const ACCESS_KEY_ERROR = 1002;          // access_key 错误
+    const SIGNATURE_ERROR = 1003;           // 签名错误
+    const SIGNATURE_LAPSE = 1004;           // 签名失效
+    const SIGNATURE_REPETITION = 1005;      // 签名重复
 
     /**
      * Handle an incoming request.
@@ -42,7 +42,7 @@ class LaravelApiAuth
             if (empty($timestamp) || empty($access_key) || empty($echostr) || empty($signature)) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuthMiddleware::LACK_HEADER
+                    LaravelApiAuth::LACK_HEADER
                 ]);      // 缺少请求头
             }
 
@@ -50,7 +50,7 @@ class LaravelApiAuth
             if (!isset($roles[$access_key])) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuthMiddleware::ACCESS_KEY_ERROR
+                    LaravelApiAuth::ACCESS_KEY_ERROR
                 ]);         // access_key 不存在
             }
 
@@ -69,7 +69,7 @@ class LaravelApiAuth
             if (!call_user_func_array($rule, [$roles[$access_key]['secret_key'], $signature, $server_signature])) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuthMiddleware::SIGNATURE_ERROR
+                    LaravelApiAuth::SIGNATURE_ERROR
                 ]);  // 签名不一致
             }
 
@@ -77,14 +77,14 @@ class LaravelApiAuth
             if (time() - $timestamp > $timeout) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuthMiddleware::SIGNATURE_LAPSE
+                    LaravelApiAuth::SIGNATURE_LAPSE
                 ]);      // 签名失效
             }
 
             if (!is_null(cache()->pull('api_auth:' . $signature))) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuthMiddleware::SIGNATURE_REPETITION
+                    LaravelApiAuth::SIGNATURE_REPETITION
                 ]);      // 签名重复(已存在该签名记录)
             } else {
                 cache()->put('api_auth:' . $signature, $request->getClientIp(), $timeout / 60);
