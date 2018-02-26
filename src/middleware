@@ -81,13 +81,13 @@ class LaravelApiAuth
                 ]);      // 签名失效
             }
 
-            if (!is_null(cache()->pull('api_auth:' . $signature))) {
+            if (!is_null(app('cache')->pull('api_auth:' . $signature))) {
                 return call_user_func_array($error_handler, [
                     $request,
                     LaravelApiAuth::SIGNATURE_REPETITION
                 ]);      // 签名重复(已存在该签名记录)
             } else {
-                cache()->put('api_auth:' . $signature, $request->getClientIp(), $timeout / 60);
+                app('cache')->put('api_auth:' . $signature, $request->getClientIp(), $timeout / 60);
             }
 
             /**
