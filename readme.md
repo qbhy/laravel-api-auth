@@ -15,7 +15,7 @@ composer require 96qbhy/laravel-api-auth
     ```
     > laravel 5.5+ 版本不需要手动注册
 
-2. 发布配置文件和中间件
+2. 发布配置文件
     ```php
     php artisan vendor:publish --provider="Qbhy\LaravelApiAuth\ServiceProvider"
     ```
@@ -23,7 +23,7 @@ composer require 96qbhy/laravel-api-auth
 3. 在 `App\Http\Kernal` 中注册中间件 
     ```php
     protected $routeMiddleware = [
-        'api_auth' => \App\Http\Middleware\LaravelApiAuth::class,
+        'api_auth' => \Qbhy\LaravelApiAuth\LaravelApiAuth::class,
         // other ...
     ];
     ```
@@ -138,8 +138,8 @@ axios.post('/api/example',{},requestConfig).then(res=>{
 ```
 > 本例子为 `web` 前端的例子，其他客户端同理，生成签名并且带上指定参数即可正常请求。
 > 通过自定义签名方法和自定义校验方法，可以使用其他加密方法进行签名，例如 `哈希` 等其他加密算法。
-> 更多自定义可以直接修改 `App\Http\Middleware\LaravelApiAuth` 中间件 。有问题请开 `issue` 。
 
 
-[96qbhy.com](https://96qbhy.com)  
+
+[96qbhy.com](https://96qbhy.com)    
 96qbhy@gmail.com

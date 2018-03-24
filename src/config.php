@@ -1,15 +1,22 @@
 <?php
 
-use App\Http\Middleware\LaravelApiAuth;
+use Qbhy\LaravelApiAuth\LaravelApiAuth;
 
 return [
-    'status' => 'on', // 状态，on 或者 off
+    'status' => LaravelApiAuth::STATUS_ON, // 状态，LaravelApiAuth::STATUS_ON  或者 LaravelApiAuth::STATUS_OFF
 
     'roles' => [
-//        '{access_key}' => [
-//            'name' => '{role_name}',        // 角色名字，例如 android
-//            'secret_key' => '{secret_key}',
-//        ],
+        //        '{access_key}' => [
+        //            'name' => '{role_name}',        // 角色名字，例如 android
+        //            'secret_key' => '{secret_key}',
+        //        ],
+    ],
+
+    'auth_info_getter' => [LaravelApiAuth::class, 'auth_info_getter'],
+
+    'excludes' => [
+        'handler' => [LaravelApiAuth::class, 'excludes_handler'],
+        'urls' => [],
     ],
 
     'timeout' => 60, // 签名失效时间，单位: 秒
