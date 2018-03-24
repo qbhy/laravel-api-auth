@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use RuntimeException;
 
-class LaravelApiAuth
+class Middleware
 {
 
     const LACK_HEADER          = 1001;               // 缺少头
