@@ -23,7 +23,7 @@ composer require 96qbhy/laravel-api-auth
 3. 在 `App\Http\Kernal` 中注册中间件 
     ```php
     protected $routeMiddleware = [
-        'api_auth' => \Qbhy\LaravelApiAuth\LaravelApiAuth::class,
+        'api_auth' => \Qbhy\LaravelApiAuth\Middleware::class,
         // other ...
     ];
     ```
