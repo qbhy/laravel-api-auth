@@ -1,9 +1,9 @@
 <?php
 
-use Qbhy\LaravelApiAuth\LaravelApiAuth;
+use Qbhy\LaravelApiAuth\Middleware;
 
 return [
-    'status' => LaravelApiAuth::STATUS_ON, // 状态，LaravelApiAuth::STATUS_ON  或者 LaravelApiAuth::STATUS_OFF
+    'status' => Middleware::STATUS_ON, // 状态，LaravelApiAuth::STATUS_ON  或者 LaravelApiAuth::STATUS_OFF
 
     'roles' => [
         //        '{access_key}' => [
@@ -12,18 +12,18 @@ return [
         //        ],
     ],
 
-    'auth_info_getter' => [LaravelApiAuth::class, 'auth_info_getter'],
+    'auth_info_getter' => [Middleware::class, 'auth_info_getter'],
 
     'excludes' => [
-        'handler' => [LaravelApiAuth::class, 'excludes_handler'],
+        'handler' => [Middleware::class, 'excludes_handler'],
         'urls' => [],
     ],
 
     'timeout' => 60, // 签名失效时间，单位: 秒
 
-    'encrypting' => [LaravelApiAuth::class, 'encrypting'], // 自定义签名方法
+    'encrypting' => [Middleware::class, 'encrypting'], // 自定义签名方法
 
-    'rule' => [LaravelApiAuth::class, 'rule'], // 判断签名正确的规则，默认是相等
+    'rule' => [Middleware::class, 'rule'], // 判断签名正确的规则，默认是相等
 
-    'error_handler' => [LaravelApiAuth::class, 'error_handler'], // 签名错误处理方法。
+    'error_handler' => [Middleware::class, 'error_handler'], // 签名错误处理方法。
 ];

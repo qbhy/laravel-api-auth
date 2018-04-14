@@ -1,6 +1,6 @@
 <?php
 
-namespace Qbhy\LaravelApiAuth;
+namespace Qbhy\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -25,11 +25,13 @@ class Middleware
 
     /**
      * Handle an incoming request.
+     *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $roles)
     {
         if ($this->config['status'] === static::STATUS_ON) {
 
@@ -60,7 +62,7 @@ class Middleware
             if (empty($timestamp) || empty($access_key) || empty($echostr) || empty($signature)) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuth::LACK_HEADER
+                    Middleware::LACK_HEADER,
                 ]);      // 缺少请求头
             }
 
@@ -68,7 +70,7 @@ class Middleware
             if (!isset($roles[$access_key])) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuth::ACCESS_KEY_ERROR
+                    Middleware::ACCESS_KEY_ERROR,
                 ]);         // access_key 不存在
             }
 
@@ -84,12 +86,13 @@ class Middleware
                 throw new RuntimeException('config("api_auth.rule") is not function !');
             }
 
-            $server_signature = call_user_func_array($encrypting, [$roles[$access_key]['secret_key'], $echostr, $timestamp]);
+            $server_signature =
+                call_user_func_array($encrypting, [$roles[$access_key]['secret_key'], $echostr, $timestamp]);
 
             if (!call_user_func_array($rule, [$roles[$access_key]['secret_key'], $signature, $server_signature])) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuth::SIGNATURE_ERROR
+                    Middleware::SIGNATURE_ERROR,
                 ]);  // 签名不一致
             }
 
@@ -97,14 +100,14 @@ class Middleware
             if (time() - $timestamp > $timeout) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuth::SIGNATURE_LAPSE
+                    Middleware::SIGNATURE_LAPSE,
                 ]);      // 签名失效
             }
 
             if (!is_null(app('cache')->pull('api_auth:' . $signature))) {
                 return call_user_func_array($error_handler, [
                     $request,
-                    LaravelApiAuth::SIGNATURE_REPETITION
+                    Middleware::SIGNATURE_REPETITION,
                 ]);      // 签名重复(已存在该签名记录)
             } else {
                 app('cache')->put('api_auth:' . $signature, $request->getClientIp(), $timeout / 60);
@@ -118,6 +121,7 @@ class Middleware
             }
             $request->offsetSet('client_role', $roles[$access_key]['name']);
         }
+
         return $next($request);
     }
 
@@ -133,7 +137,8 @@ class Middleware
 
     /**
      * @param Request $request
-     * @param array $urls
+     * @param array   $urls
+     *
      * @return bool
      */
     public static function excludes_handler(Request $request, array $urls = [])
@@ -147,14 +152,15 @@ class Middleware
 
     /**
      * @param Request $request
-     * @param int $code
+     * @param int     $code
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public static function error_handler($request, $code = 403)
     {
         return response()->json([
-            'msg' => 'Forbidden',
-            'code' => $code
+            'msg'  => 'Forbidden',
+            'code' => $code,
         ], 403);
     }
 
@@ -162,6 +168,7 @@ class Middleware
      * @param $secret_key
      * @param $echostr
      * @param $timestamp
+     *
      * @return string
      */
     public static function encrypting($secret_key, $echostr, $timestamp)
@@ -173,6 +180,7 @@ class Middleware
      * @param $secret_key
      * @param $signature
      * @param $server_signature
+     *
      * @return bool
      */
     public static function rule($secret_key, $signature, $server_signature)
