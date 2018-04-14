@@ -31,7 +31,7 @@ class Middleware
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $roles)
+    public function handle($request, Closure $next)
     {
         if ($this->config['status'] === static::STATUS_ON) {
 
