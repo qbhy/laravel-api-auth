@@ -1,6 +1,6 @@
 <?php
 
-namespace Qbhy\Middleware;
+namespace Qbhy\LaravelApiAuth;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -132,7 +132,7 @@ class Middleware
         $echostr    = $request->header('api-echostr');
         $signature  = $request->header('api-signature');
 
-        return compact('access_key', 'timestamp', 'echostr', 'signature');
+        return [$access_key, $timestamp, $echostr, $signature];
     }
 
     /**
