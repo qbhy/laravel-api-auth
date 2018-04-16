@@ -33,7 +33,7 @@ class Middleware
             // 得到 api token
             $token = $request->hasHeader('api-token') ? $request->header('api-token') : $request->get('api-token');
 
-            // 得到 header 、 payload signature 三段字符串
+            // 得到 header 、 payload 、 signature 三段字符串
             list($header_string, $payload_string, $signature) = explode(".", $token);
 
             $roles = $this->config['roles'];
@@ -65,7 +65,7 @@ class Middleware
             /** @var SignatureInterface $signature_method */
             $signature_method = $this->config['signature_methods'][$header['alg']];
             // 检查签名是否正确
-            if ($signature_method::check($header_string . $payload_string, $role['secret_key'], $signature)) {
+            if ($signature_method::check("$header_string.$payload_string", $role['secret_key'], $signature)) {
                 throw new InvalidTokenException('invalid token !');
             }
 

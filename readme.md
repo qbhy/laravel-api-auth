@@ -43,55 +43,38 @@ composer require 96qbhy/laravel-api-auth
     ```
 
 5. 自定义签名方法 (可选)
-    `config/api_auth.php` 中的 `encrypting` 可以修改为自定义的签名函数，该函数将传入三个参数: 密钥: `$secret_key`、随机字符串: `$echostr`、时间戳: `$timestamp`，返回签名后的字符串。该函数默认为: 
+    `config/api_auth.php` 中的 `signature_methods` 可以添加自定义的签名类，该类需要继承自 `Qbhy\LaravelApiAuth\Signatures\SignatureInterface` 接口 
     ```php
+   <?php
     /**
-     * @param $secret_key
-     * @param $echostr
-     * @param $timestamp
-     * @return string
+     * User: 96qbhy
+     * Date: 2018/4/16
+     * Time: 下午3:22
      */
-    function encrypting($secret_key, $echostr, $timestamp) {
-        return md5($secret_key . $echostr . $timestamp);
+    
+    namespace Qbhy\LaravelApiAuth\Signatures;
+    
+    
+    class Md5 implements SignatureInterface
+    {
+        public static function sign(string $string, string $secret): string
+        {
+            return md5($string . $secret);
+        }
+    
+        public static function check(string $string, string $secret, string $signature): bool
+        {
+            return static::sign($string, $secret) === $signature;
+        }
+    
     }
     ```
-6. 自定义签名校验规则(可选)
-    `config/api_auth.php` 中的 `rule` 可以修改为自定义的校验函数，该函数将传入三个参数: 密钥: `$secret_key`、客户端签名: `$signature`、服务端签名: `$server_signature`，必须返回布尔值。该函数默认为: 
-     ```php
-     /**
-      * @param $secret_key
-      * @param $signature
-      * @param $server_signature
-      * @return bool
-      */
-     function rule($secret_key, $signature, $server_signature)
-     {
-         return $signature === $server_signature;
-     }
-     ```
-7. 自定义错误处理(可选)
-    `config/api_auth.php` 中的 `error_handler` 可以修改为自定义的错误处理函数，该函数将传入两个参数: 请求: `$request`、错误码: `$code`。该函数默认为: 
-     ```php
-     /**
-      * @param Request $request
-      * @param int $code
-      * @return \Illuminate\Http\JsonResponse
-      */
-     function error_handler($request, $code)
-     {
-         return response()->json([
-             'msg' => 'Forbidden',
-             'code' => $code
-         ], 403);
-     }  
-     ```
-     `$code` 可能是以下几个值中的一个:
-     * `LaravelApiAuth::LACK_HEADER` -> 缺少请求头。
-     * `LaravelApiAuth::ACCESS_KEY_ERROR` -> `access_key` 错误。
-     * `LaravelApiAuth::SIGNATURE_ERROR` -> 签名错误。
-     * `LaravelApiAuth::SIGNATURE_LAPSE` -> 签名失效，客户端签名时间和服务端签名时间差超过设置的 `timeout` 值。
-     * `LaravelApiAuth::SIGNATURE_REPETITION` -> 签名重复，规定时间内出现两次或以上相同的签名。
-     
+7. 自定义错误处理
+    token 校验不通过的情况下会抛异常，请在 `Handler` 捕获后自行处理。
+    目前有三种异常 ： 
+    1. AccessKeyException
+    2. InvalidTokenException
+    3. SignatureMethodException
      
 ## 使用  
 ### 路由中
@@ -119,16 +102,26 @@ const secret_key = '{secret_key}';  // 服务端生成的 secret_key
 const timestamp = Date.parse(new Date()) / 1000;    // 取时间戳
 const echostr = 'asldjaksdjlkjgqpojg64131321';      // 随机字符串自行生成
 
-function encrypting(secret_key, echostr, timestamp){
-    return md5(secret_key + echostr + timestamp);    // md5 库自行引入
+const header = JSON.stringify({
+                                  "alg": "md5",
+                                  "type": "jwt"
+                              });
+const payload = JSON.stringify({
+                                   "timestamp": timestamp,
+                                   "echostr": echostr,
+                                   "ak": access_key
+                               });
+const signature_string = header  + '.' + payload;
+
+function md5Sign(string, secret){
+    return md5(string + secret);    // md5 库自行引入
 }
+
+const api_token = signature_string + '.' + md5Sign(signature_string,secret_key);
 
 const requestConfig = {
     headers: {
-        "api-signature": encrypting(secret_key, echostr, timestamp),
-        "api-echostr": echostr,
-        "api-timestamp": timestamp,
-        "api-access-key": access_key
+        "api-token": api_token
     }
 };
 
