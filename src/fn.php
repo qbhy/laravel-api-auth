@@ -1,6 +1,6 @@
 <?php
 
-if(!function_exists('str_rand')){
+if (!function_exists('str_rand')) {
     /*
     * 生成随机字符串
     * @param int $length 生成随机字符串的长度
@@ -16,6 +16,7 @@ if(!function_exists('str_rand')){
         for ($i = $length; $i > 0; $i--) {
             $string .= $char[mt_rand(0, strlen($char) - 1)];
         }
+
         return $string;
     }
 }

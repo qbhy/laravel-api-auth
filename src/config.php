@@ -16,8 +16,8 @@ return [
         'md5' => \Qbhy\LaravelApiAuth\Signatures\Md5::class,
     ],
 
-    'excludes' => [
-        'handler' => [Middleware::class, 'excludes_handler'],
+    'skip' => [
+        'is' => [Middleware::class, 'default_excludes_handler'],
         'urls'    => [],
     ],
 
