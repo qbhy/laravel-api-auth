@@ -64,8 +64,8 @@ class Middleware
     public function parseParams(string $header_string, string $payload_string): array
     {
         // 检查参数 --begin
-        $header  = @json_decode($header_string, true);
-        $payload = @json_decode($payload_string, true);
+        $header  = @json_decode(base64_decode($header_string), true);
+        $payload = @json_decode(base64_decode($payload_string), true);
 
         if (!is_array($header) ||
             !isset($header['alg']) ||

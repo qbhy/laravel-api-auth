@@ -95,6 +95,7 @@ Route::group(['middleware'=>'api_auth'], function(){
 ### 前端
 ```javascript
 import axios from 'axios';
+import { Base64 } from 'js-base64';
 
 const access_key = '{access_key}';  // 服务端生成的 access_key
 const secret_key = '{secret_key}';  // 服务端生成的 secret_key
@@ -102,15 +103,15 @@ const secret_key = '{secret_key}';  // 服务端生成的 secret_key
 const timestamp = Date.parse(new Date()) / 1000;    // 取时间戳
 const echostr = 'asldjaksdjlkjgqpojg64131321';      // 随机字符串自行生成
 
-const header = JSON.stringify({
-                                  "alg": "md5",
-                                  "type": "jwt"
-                              });
-const payload = JSON.stringify({
-                                   "timestamp": timestamp,
-                                   "echostr": echostr,
-                                   "ak": access_key
-                               });
+const header = Base64.encode(JSON.stringify({
+                   "alg": "md5",
+                   "type": "jwt"
+               }));
+const payload = Base64.encode(JSON.stringify({
+                 "timestamp": timestamp,
+                 "echostr": echostr,
+                 "ak": access_key
+             }));
 const signature_string = header  + '.' + payload;
 
 function md5Sign(string, secret){
