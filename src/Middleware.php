@@ -18,14 +18,15 @@ class Middleware
     {
         $this->config = config('api_auth');
     }
-
+    
     /**
-     * Handle an incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param $request
+     * @param \Closure $next
      *
      * @return mixed
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\AccessKeyException
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\InvalidTokenException
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\SignatureMethodException
      */
     public function handle($request, Closure $next)
     {
