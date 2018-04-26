@@ -1,6 +1,6 @@
 <?php
 
-namespace Qbhy\LaravelApiAuth\Middleware;
+namespace Qbhy\LaravelApiAuth;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Qbhy\LaravelApiAuth\Signatures\SignatureInterface;
 
 class Middleware
 {
-    const STATUS_ON  = 'on';
+    const STATUS_ON = 'on';
     const STATUS_OFF = 'off';
 
     public function __construct()
@@ -20,12 +20,13 @@ class Middleware
     }
 
     /**
-     * Handle an incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request  $request
+     * @param \Closure $next
      *
      * @return mixed
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\AccessKeyException
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\InvalidTokenException
+     * @throws \Qbhy\LaravelApiAuth\Exceptions\SignatureMethodException
      */
     public function handle($request, Closure $next)
     {
