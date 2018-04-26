@@ -1,7 +1,8 @@
 # laravel-api-auth
 laravel API 鉴权
 
-这是一个 laravel 的 API 鉴权包， `laravel-api-auth` 采用密钥加密的鉴权方式，只要客户端不被反编译从而泄露密钥，该鉴权方式理论上来说是安全的。
+这是一个 laravel 的 API 鉴权包， `laravel-api-auth` 采用 `jwt token` 的鉴权方式，只要客户端不被反编译从而泄露密钥，该鉴权方式理论上来说是安全的。
+PS: web 前端 API 没有绝对的安全，该项目的本意是给不暴露源码的客户端提供一种鉴权方案(如 service、APP客户端)。
 
 ## 安装  
 ```bash
