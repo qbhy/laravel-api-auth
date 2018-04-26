@@ -18,7 +18,7 @@ class Middleware
     {
         $this->config = config('api_auth');
     }
-
+    
     /**
      * @param Request  $request
      * @param \Closure $next
