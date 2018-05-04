@@ -1,6 +1,6 @@
 <?php
 
-use Qbhy\LaravelApiAuth\Middleware\Middleware;
+use Qbhy\LaravelApiAuth\Middleware;
 
 return [
     'status' => Middleware::STATUS_ON, // 状态，LaravelApiAuth::STATUS_ON  或者 LaravelApiAuth::STATUS_OFF
